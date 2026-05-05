@@ -1,1 +1,96 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paiement MAFIRIDE</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:
+    linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("background.jpg") no-repeat center;
+  background-size:cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  width:340px;
+  text-align:center;
+}
+
+.logo{
+  width:120px;
+  margin-bottom:10px;
+}
+
+select,input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+}
+
+button{
+  background:#00bcd4;
+  color:white;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#0097a7;
+}
+</style>
+
+<script src="https://leekpay.fr/js/leekpay.js"></script>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<img src="logo.png" class="logo">
+
+<h3>Paiement commande alimentaire</h3>
+
+<select id="amount">
+  <option value="150">Commande simple - 150 USD</option>
+  <option value="300">Commande moyenne - 300 USD</option>
+  <option value="500">Commande complète - 500 USD</option>
+</select>
+
+<input id="phone" placeholder="Entrez votre numéro">
+
+<button onclick="payer()">Payer</button>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+function payer(){
+
+  document.getElementById("msg").innerText = "Connexion paiement...";
+
+  LeekPay.checkout({
+    amount: parseInt(document.getElementById("amount").value),
+    currency: "XOF",
+    apiKey: "pk_live_xxx" // 🔥 MET TA CLE PUBLIQUE ICI
+  });
+
+}
+
+</script>
+
+</body>
+</html>
